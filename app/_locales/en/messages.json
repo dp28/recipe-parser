@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Recipe parser",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "Extracts recipes from web pages",
+    "description": "The description of the application"
+  }
+}

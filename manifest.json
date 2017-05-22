@@ -1,17 +1,11 @@
 {
-  "name": "__MSG_appName__",
+  "name": "Recipe parser",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__",
-  "icons": {
-    "16": "images/icon-16.png",
-    "128": "images/icon-128.png"
-  },
-  "default_locale": "en",
+  "description": "Extracts recipes from web pages",
   "background": {
     "scripts": [
-      "scripts/chromereload.js",
-      "scripts/background.js"
+      "dist/js/background.js"
     ]
   },
   "permissions": [
@@ -20,7 +14,7 @@
     "https://*/*"
   ],
   "options_ui": {
-    "page": "options.html",
+    "page": "dist/options.html",
     "chrome_style": true
   },
   "content_scripts": [
@@ -30,18 +24,14 @@
         "https://*/*"
       ],
       "js": [
-        "scripts/contentscript.js"
+        "dist/js/content_script.js"
       ],
       "run_at": "document_end",
       "all_frames": false
     }
   ],
   "browser_action": {
-    "default_icon": {
-      "19": "images/icon-19.png",
-      "38": "images/icon-38.png"
-    },
     "default_title": "recipe parser",
-    "default_popup": "popup.html"
+    "default_popup": "dist/popup.html"
   }
 }

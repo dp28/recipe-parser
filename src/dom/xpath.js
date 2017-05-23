@@ -1,3 +1,22 @@
+export function findFirstElementByXPath(path) {
+  return findByXPath(path, XPathResult.FIRST_ORDERED_NODE_TYPE);
+}
+
+export function findOrderedElementsByXPath(path) {
+  const nodes = findByXPath(path, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
+  const elements = [];
+  let element = nodes.iterateNext();
+  while (element) {
+    elements.push(element);
+    element = nodes.iterateNext();
+  }
+  return elements;
+}
+
+function findByXPath(path, resultType) {
+  return document.evaluate(path, document, null, resultType, null);
+}
+
 export function getPathToSiblings(element) {
   return getPathTo(element, '', true);
 }

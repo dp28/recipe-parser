@@ -1,3 +1,9 @@
+import recipeForm from './templates/recipe-form.pug';
+
+const popup = document.createElement('div');
+popup.innerHTML = recipeForm({ name: 'test' });
+document.body.appendChild(popup);
+
 function extractTarget(func) {
   return event => func(event.target);
 }

@@ -19,9 +19,16 @@ module.exports = {
           "eslint-loader"
         ],
       },
+      {
+        test: /\.pug$/,
+        exclude: /node_modules/,
+        use: [
+          "pug-loader"
+        ],
+      },
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.pug']
   }
 };

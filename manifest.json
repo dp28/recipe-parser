@@ -5,7 +5,8 @@
   "description": "Extracts recipes from web pages",
   "background": {
     "scripts": [
-      "dist/js/background.js"
+      "dist/js/background.js",
+      "lib/hot-reload.js"
     ]
   },
   "permissions": [

@@ -25,7 +25,7 @@
         "https://*/*"
       ],
       "js": [
-        "dist/js/content_script.js"
+        "dist/js/content-script.js"
       ],
       "run_at": "document_end",
       "all_frames": false

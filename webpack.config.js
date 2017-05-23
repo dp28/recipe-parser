@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    "content_script": "./src/content_script.js",
+    "content-script": "./src/content-script.js",
     "popup": "./src/popup.js",
     "background": "./src/background.js",
     "options": "./src/options.js"

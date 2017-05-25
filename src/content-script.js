@@ -1,15 +1,45 @@
 import recipeForm from './templates/recipe-form.pug';
+import * as dom from './dom/css';
+import { getXPathToElement, findByXPath } from './dom/xpath';
+import {
+  addEventListeners,
+  addEventListener,
+  removeEventListeners,
+  extractTarget,
+} from './dom/events';
 
 const popup = document.createElement('div');
 popup.innerHTML = recipeForm({ name: 'test' });
 document.body.appendChild(popup);
 
-function extractTarget(func) {
-  return event => func(event.target);
+dom.findAll('.replaceButton', popup).forEach((button) => {
+  addEventListener('click', () => beginToChangeFieldSource(button.parentNode), button);
+});
+
+function beginToChangeFieldSource(field) {
+  const listeners = {
+    mouseover: extractTarget(highlightSiblings),
+    mouseout: extractTarget(restoreSiblings),
+    click: extractTarget((element) => {
+      removeEventListeners(listeners);
+      restoreSiblings(element);
+      changeFieldSource(field, element);
+    }),
+  };
+
+  setTimeout(() => addEventListeners(listeners));
 }
 
-document.addEventListener('mouseover', extractTarget(highlightSiblings));
-document.addEventListener('mouseout', extractTarget(restoreSiblings));
+function changeFieldSource(field, sourceElement) {
+  const xpath = getXPathToElement(sourceElement);
+  dom.find('.xpath', field).value = xpath;
+  setTitle(xpath);
+}
+
+function setTitle(xpathToTitle) {
+  const titleElement = findByXPath(xpathToTitle);
+  dom.find('.titleField .value', popup).innerText = titleElement.innerText;
+}
 
 function highlightSiblings(element) {
   element.parentNode.childNodes.forEach(highlightElement.bind(null, 'green'));

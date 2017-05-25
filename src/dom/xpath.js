@@ -1,9 +1,10 @@
-export function findFirstElementByXPath(path) {
-  return findByXPath(path, XPathResult.FIRST_ORDERED_NODE_TYPE);
+export function findByXPath(xpath) {
+  const result = evaluateXPath(xpath, XPathResult.FIRST_ORDERED_NODE_TYPE);
+  return result.singleNodeValue;
 }
 
-export function findOrderedElementsByXPath(path) {
-  const nodes = findByXPath(path, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
+export function findAllByXPath(xpath) {
+  const nodes = evaluateXPath(xpath, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
   const elements = [];
   let element = nodes.iterateNext();
   while (element) {
@@ -13,15 +14,15 @@ export function findOrderedElementsByXPath(path) {
   return elements;
 }
 
-function findByXPath(path, resultType) {
-  return document.evaluate(path, document, null, resultType, null);
+function evaluateXPath(xpath, resultType) {
+  return document.evaluate(xpath, document, null, resultType, null);
 }
 
-export function getPathToSiblings(element) {
+export function getXPathToSiblings(element) {
   return getPathTo(element, '', true);
 }
 
-export function getPathToElement(element) {
+export function getXPathToElement(element) {
   return getPathTo(element);
 }
 

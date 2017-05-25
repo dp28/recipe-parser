@@ -1,0 +1,5 @@
+.field
+  label(style="display: block; text-transform: capitalize;") #{field.name}
+  input.xpath(type='hidden' value='#{field.xpath}')
+  .value #{field.value}
+  button.updateButton #{field.xpath ? 'Change' : 'Set'}

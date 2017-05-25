@@ -8,13 +8,23 @@ export function removeEventListener(eventType, listener, root = document) {
 
 export function addEventListeners(listenerMap, root = document) {
   Object.keys(listenerMap).forEach((eventType) => {
-    addEventListener(eventType, listenerMap[eventType], root);
+    const listener = listenerMap[eventType];
+    if (listener.useCapture) {
+      root.addEventListener(eventType, listener.listener, true);
+    } else {
+      addEventListener(eventType, listener, root);
+    }
   });
 }
 
 export function removeEventListeners(listenerMap, root = document) {
   Object.keys(listenerMap).forEach((eventType) => {
-    removeEventListener(eventType, listenerMap[eventType], root);
+    const listener = listenerMap[eventType];
+    if (listener.useCapture) {
+      root.removeEventListener(eventType, listener.listener, true);
+    } else {
+      removeEventListener(eventType, listener, root);
+    }
   });
 }
 

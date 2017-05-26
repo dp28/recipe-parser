@@ -1,3 +1,5 @@
+import { isPromise } from '../promise';
+
 export function registerFunctions(functionMap) {
   chrome.runtime.onMessage.addListener((message, sender, respond) => {
     const callback = functionMap[message.functionName];
@@ -13,7 +15,7 @@ export function registerFunctions(functionMap) {
 function applyFunction(func, args, respond) {
   const result = func(...args);
 
-  if (result && result.then) {
+  if (isPromise(result)) {
     result.then(respond);
     return true;
   } else {

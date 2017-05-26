@@ -1,9 +1,28 @@
 import '../lib/hot-reload';
+import { connect, registerFunctions } from './messaging/rpc';
+
+console.log('loaded');
 
 chrome.browserAction.onClicked.addListener(tab => {
-  sendToTab(tab, { type: 'TOGGLE_POPUP' })
+  connect(tab).call('togglePopup');
 });
 
-function sendToTab(tab, message) {
-  chrome.tabs.sendMessage(tab.id, message);
+const CACHE = {};
+
+registerFunctions({
+  onTabLoaded: host => fetchRecipeParser(host)
+});
+
+function fetchRecipeParser(key) {
+  const parser = CACHE[key] || buildEmptyRecipeParser();
+  CACHE[key] = parser;
+  return parser;
+}
+
+function buildEmptyRecipeParser() {
+  return {
+    title: { name: 'title' },
+    ingredients: { name: 'ingredients' },
+    method: { name: 'method' },
+  };
 }

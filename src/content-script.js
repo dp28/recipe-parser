@@ -1,26 +1,22 @@
 import { RecipeForm } from './components/recipe-form/recipe-form';
 import { TextField } from './components/text-field/text-field';
+import { registerFunctions, connect } from './messaging/rpc';
 
-const recipe = {
-  title: { name: 'title' },
-  ingredients: { name: 'ingredients' },
-  method: { name: 'method' },
-};
+function loadPopup(recipe) {
+  const popup = RecipeForm(recipe, console.log.bind(console));
+  document.body.appendChild(popup);
 
-const popup = RecipeForm(recipe, console.log.bind(console));
-document.body.appendChild(popup);
+  togglePopup()
 
-togglePopup()
+  registerFunctions({ togglePopup });
 
-chrome.runtime.onMessage.addListener((message) => {
-  switch (message.type) {
-    case 'TOGGLE_POPUP': togglePopup()
+  function togglePopup() {
+    const { style } = popup;
+    const isHidden = style.display && style.display === 'none';
+    style.display = isHidden ? 'block' : 'none';
   }
-});
-
-
-function togglePopup() {
-  const { style } = popup;
-  const isHidden = style.display && style.display === 'none';
-  style.display = isHidden ? 'block' : 'none';
 }
+
+connect()
+  .call('onTabLoaded', location.host)
+  .then(loadPopup)

@@ -32,7 +32,6 @@
     }
   ],
   "browser_action": {
-    "default_title": "recipe parser",
-    "default_popup": "dist/popup.html"
+    "default_title": "recipe parser"
   }
 }

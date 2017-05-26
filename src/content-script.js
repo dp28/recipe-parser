@@ -5,19 +5,15 @@ import { registerFunctions, connect } from './messaging/rpc';
 const Connection = connect();
 const Host = location.host;
 
-function call(functionName, ...args) {
-  return Connection.call(functionName, Host, ...args);
-}
-
-function updateRecipe(recipe) {
-  call('updateRecipeParser', recipe);
-}
+call('fetchRecipeParser')
+  .then(recipe => recipe || buildEmptyRecipeParser())
+  .then(loadPopup);
 
 function loadPopup(recipe) {
   const popup = RecipeForm(recipe, updateRecipe);
   document.body.appendChild(popup);
 
-  togglePopup()
+  togglePopup();
 
   registerFunctions({ togglePopup });
 
@@ -28,4 +24,18 @@ function loadPopup(recipe) {
   }
 }
 
-call('fetchRecipeParser').then(loadPopup);
+function buildEmptyRecipeParser() {
+  return {
+    title: { name: 'title' },
+    ingredients: { name: 'ingredients' },
+    method: { name: 'method' },
+  };
+}
+
+function updateRecipe(recipe) {
+  call('updateRecipeParser', recipe);
+}
+
+function call(functionName, ...args) {
+  return Connection.call(functionName, Host, ...args);
+}

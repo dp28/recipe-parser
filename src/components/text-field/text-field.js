@@ -13,8 +13,8 @@ export function TextField(field, onUpdate) {
   const element = document.createElement('div');
   element.classList.add('field');
 
-  function render() {
-    element.innerHTML = template({ field });
+  function render({ editing } = { editing: false }) {
+    element.innerHTML = template({ field, editing });
     const updateButton = dom.find('.updateButton', element);
     addEventListener('click', beginToChangeXPath, updateButton);
   }
@@ -25,6 +25,8 @@ export function TextField(field, onUpdate) {
   }
 
   function beginToChangeXPath() {
+    render({ editing: true });
+
     const listeners = {
       mouseover: extractTarget(highlightElement),
       mouseout: extractTarget(restoreElementStyles),

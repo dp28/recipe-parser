@@ -13,8 +13,8 @@ export function ListField(field, onUpdate) {
   const element = document.createElement('div');
   element.classList.add('field', field.name);
 
-  function render() {
-    element.innerHTML = template({ field });
+  function render({ editing } = { editing: false }) {
+    element.innerHTML = template({ field, editing });
     const updateButton = dom.find('.updateButton', element);
 
     addEventListener('click', beginToChangeXPath, updateButton);
@@ -26,6 +26,8 @@ export function ListField(field, onUpdate) {
   }
 
   function beginToChangeXPath() {
+    render({ editing: true });
+
     const listeners = {
       mouseover: extractTarget(highlightSiblings),
       mouseout: extractTarget(restoreSiblings),

@@ -3,4 +3,10 @@ label
   button.updateButton edit
 
 input.xpath(type='hidden' value='#{field.xpath}')
-.value #{field.value}
+
+if editing
+  p
+    | Move the mouse to highlight the text to select, then click when it surrounds just the
+    |  #{field.name} of the recipe.
+else
+  .value #{field.value}

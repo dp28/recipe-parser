@@ -4,7 +4,12 @@ label
 
 input.xpath(type='hidden' value='#{field.xpath}')
 
-if field.value
+if editing
+  p
+    | Move the mouse to highlight the list to select, then click when it surrounds all the
+    |  items in the #{field.name} of the recipe.
+
+else if field.value
   ol
     for item in field.value
       li= item

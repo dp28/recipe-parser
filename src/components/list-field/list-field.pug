@@ -3,4 +3,8 @@ label
   button.updateButton edit
 
 input.xpath(type='hidden' value='#{field.xpath}')
-.value #{field.value}
+
+if field.value
+  ol
+    for item in field.value
+      li= item

@@ -1,7 +1,7 @@
-import template from './text-field.pug';
+import template from './list-field.pug';
 import * as dom from '../../dom/css';
-import { highlightElement, restoreElementStyles } from '../../dom/style';
-import { getXPathToElement, findByXPath } from '../../dom/xpath';
+import { highlightSiblings, restoreSiblings } from '../../dom/style';
+import { getXPathToSiblings, findAllByXPath } from '../../dom/xpath';
 import {
   addEventListeners,
   addEventListener,
@@ -9,32 +9,33 @@ import {
   extractTarget,
 } from '../../dom/events';
 
-export function TextField(field, onUpdate) {
+export function ListField(field, onUpdate) {
   const element = document.createElement('div');
-  element.classList.add('field');
+  element.classList.add('field', field.name);
 
   function render() {
     element.innerHTML = template({ field });
     const updateButton = dom.find('.updateButton', element);
+
     addEventListener('click', beginToChangeXPath, updateButton);
   }
 
   function evaluate() {
-    const sourceElement = findByXPath(field.xpath);
-    field.value = sourceElement ? sourceElement.innerText : null;
+    const sourceElements = findAllByXPath(field.xpath);
+    field.value = sourceElements ? sourceElements.map(e => e.innerText) : null;
   }
 
   function beginToChangeXPath() {
     const listeners = {
-      mouseover: extractTarget(highlightElement),
-      mouseout: extractTarget(restoreElementStyles),
+      mouseover: extractTarget(highlightSiblings),
+      mouseout: extractTarget(restoreSiblings),
       click: {
         useCapture: true,
         listener: (event) => {
           event.preventDefault();
           const newSourceElement = event.target;
           removeEventListeners(listeners);
-          restoreElementStyles(newSourceElement);
+          restoreSiblings(newSourceElement);
           updateXPath(newSourceElement);
         },
       },
@@ -44,7 +45,7 @@ export function TextField(field, onUpdate) {
   }
 
   function updateXPath(sourceElement) {
-    field.xpath = getXPathToElement(sourceElement);
+    field.xpath = getXPathToSiblings(sourceElement);
     evaluate();
     onUpdate(field);
     render();

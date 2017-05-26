@@ -12,7 +12,9 @@ div
       background: white;
       padding: 20px;
       box-shadow: -3px 3px 25px #111;
-      border-radius: 5px
+      border-radius: 5px;
+      overflow-y: auto;
+      display: block;
     }
 
     #parser-popup * {
@@ -36,6 +38,47 @@ div
 
     #parser-popup button:hover {
       background: #ccc;
+    }
+
+    #parser-popup #form {
+      display: block;
+      height: auto;
+      width: auto;
+    }
+
+    #parser-popup .field {
+      margin-top: 10px;
+      display: block
+    }
+
+    #parser-popup .field label {
+      display: block;
+      text-transform: capitalize;
+      font-weight: bold;
+    }
+
+    #parser-popup .field .updateButton {
+      font-size: 0.8em;
+      font-weight: normal;
+      margin-left: 5px;
+      padding: 2px;
+      border-radius: 5px;
+    }
+
+    #parser-popup .field ol {
+      display: block;
+      padding-left: 10px;
+      list-style-type: none;
+    }
+
+    #parser-popup .field.method ol {
+      padding-left: 25px;
+      list-style-type: decimal;
+    }
+
+    #parser-popup .field li {
+      display: list-item;
+      margin-bottom: 5px;
     }
 
   #parser-popup

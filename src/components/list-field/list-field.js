@@ -1,7 +1,8 @@
 import template from './list-field.pug';
 import * as dom from '../../dom/css';
 import { highlightSiblings, restoreSiblings } from '../../dom/style';
-import { getXPathToSiblings, findAllByXPath } from '../../dom/xpath';
+import { getXPathToSiblings } from '../../dom/xpath';
+import { parseField } from '../../parser';
 import {
   addEventListeners,
   addEventListener,
@@ -21,8 +22,7 @@ export function ListField(field, onUpdate) {
   }
 
   function evaluate() {
-    const sourceElements = findAllByXPath(field.xpath);
-    field.value = sourceElements ? sourceElements.map(e => e.innerText) : null;
+    field.value = parseField(field)
   }
 
   function beginToChangeXPath() {
@@ -47,7 +47,7 @@ export function ListField(field, onUpdate) {
   }
 
   function updateXPath(sourceElement) {
-    field.xpath = getXPathToSiblings(sourceElement);
+    field.path = getXPathToSiblings(sourceElement);
     evaluate();
     onUpdate(field);
     render();

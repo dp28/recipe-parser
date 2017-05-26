@@ -1,7 +1,8 @@
 import template from './text-field.pug';
 import * as dom from '../../dom/css';
 import { highlightElement, restoreElementStyles } from '../../dom/style';
-import { getXPathToElement, findByXPath } from '../../dom/xpath';
+import { getXPathToElement } from '../../dom/xpath';
+import { parseField } from '../../parser';
 import {
   addEventListeners,
   addEventListener,
@@ -20,8 +21,8 @@ export function TextField(field, onUpdate) {
   }
 
   function evaluate() {
-    const sourceElement = findByXPath(field.xpath);
-    field.value = sourceElement ? sourceElement.innerText : null;
+    console.log(field, parseField(field))
+    field.value = parseField(field);
   }
 
   function beginToChangeXPath() {
@@ -46,7 +47,7 @@ export function TextField(field, onUpdate) {
   }
 
   function updateXPath(sourceElement) {
-    field.xpath = getXPathToElement(sourceElement);
+    field.path = getXPathToElement(sourceElement);
     evaluate();
     onUpdate(field);
     render();

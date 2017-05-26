@@ -26,9 +26,9 @@ function loadPopup(recipe) {
 
 function buildEmptyRecipeParser() {
   return {
-    title: { name: 'title' },
-    ingredients: { name: 'ingredients' },
-    method: { name: 'method' },
+    title: { name: 'title', type: 'text' },
+    ingredients: { name: 'ingredients', type: 'list' },
+    method: { name: 'method', type: 'list' },
   };
 }
 

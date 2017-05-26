@@ -4,6 +4,9 @@ export function registerFunctions(functionMap) {
     if (callback) {
       respond(callback.apply(null, message.args));
     }
+    else {
+      console.error(`function ${message.functionName} has not been registered`);
+    }
   });
 }
 

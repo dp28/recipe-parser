@@ -7,16 +7,18 @@ chrome.browserAction.onClicked.addListener(tab => {
   connect(tab).call('togglePopup');
 });
 
-const CACHE = {};
+const Cache = {};
 
-registerFunctions({
-  onTabLoaded: host => fetchRecipeParser(host)
-});
+registerFunctions({ fetchRecipeParser, updateRecipeParser });
 
 function fetchRecipeParser(key) {
-  const parser = CACHE[key] || buildEmptyRecipeParser();
-  CACHE[key] = parser;
+  const parser = Cache[key] || buildEmptyRecipeParser();
+  Cache[key] = parser;
   return parser;
+}
+
+function updateRecipeParser(key, parser) {
+  Cache[key] = parser;
 }
 
 function buildEmptyRecipeParser() {

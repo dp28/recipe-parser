@@ -10,10 +10,10 @@ export function highlightElement(element) {
 }
 
 export function restoreSiblings(element) {
-  element.parentNode.childNodes.forEach(restoreElementStyles);
+  element.parentNode.childNodes.forEach(restoreElement);
 }
 
-export function restoreElementStyles(element) {
+export function restoreElement(element) {
   const { style } = element;
   if (style) {
     style.border = '';

@@ -15,9 +15,10 @@ export function RecipeForm(fieldMap, onUpdate) {
   function render() {
     element.innerHTML = template();
     const form = dom.find('#form', element);
-    Object.values(fieldMap).forEach((field) => {
-      form.appendChild(renderField(field, updateField))
-    });
+    Object
+      .values(fieldMap)
+      .sort((a, b) => a.order - b.order)
+      .forEach((field) => { form.appendChild(renderField(field, updateField)) });
   }
 
   render();

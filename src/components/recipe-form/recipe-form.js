@@ -3,25 +3,32 @@ import * as dom from '../../dom/css';
 import { TextField } from '../text-field/text-field';
 import { ListField } from '../list-field/list-field';
 
-export function RecipeForm(model, onUpdate) {
+export function RecipeForm(fieldMap, onUpdate) {
   const element = document.createElement('div');
 
-  function updateProperty(propertyName) {
-    return (property) => {
-      Object.assign(model, { [propertyName]: property });
-      onUpdate(model);
-      render();
-    };
+  function updateField(field) {
+    fieldMap[field.name] = field;
+    onUpdate(fieldMap);
+    render();
   }
 
   function render() {
-    element.innerHTML = template({ model });
+    element.innerHTML = template();
     const form = dom.find('#form', element);
-    form.appendChild(TextField(model.title, updateProperty('title')));
-    form.appendChild(ListField(model.ingredients, updateProperty('ingredients')));
-    form.appendChild(ListField(model.method, updateProperty('method')));
+    Object.values(fieldMap).forEach((field) => {
+      form.appendChild(renderField(field, updateField))
+    });
   }
 
   render();
   return element;
+}
+
+const FieldComponents = {
+  text: TextField,
+  list: ListField,
+}
+
+function renderField(field, updateField) {
+  return FieldComponents[field.type](field, updateField);
 }

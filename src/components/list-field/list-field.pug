@@ -9,7 +9,7 @@ if editing
     | Move the mouse to highlight the list to select, then click when it surrounds all the
     |  items in the #{field.name} of the recipe.
 
-else if field.value
+else if value
   ol
-    for item in field.value
+    for item in value
       li= item

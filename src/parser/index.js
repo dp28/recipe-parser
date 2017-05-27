@@ -13,6 +13,15 @@ const Parsers = {
   ),
 }
 
+export function parse(fields) {
+  return fields.reduce(appendParsedField, {});
+}
+
+function appendParsedField(result, field) {
+  result[field.name] = parseField(field);
+  return result;
+}
+
 export function parseField({ type, path }) {
   const parser = Parsers[type];
   if (parser && path) {

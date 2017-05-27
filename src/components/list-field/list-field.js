@@ -13,16 +13,17 @@ import {
 export function ListField(field, onUpdate) {
   const element = document.createElement('div');
   element.classList.add('field', field.name);
+  let value;
 
   function render({ editing } = { editing: false }) {
-    element.innerHTML = template({ field, editing });
+    element.innerHTML = template({ field, editing, value });
     const updateButton = dom.find('.updateButton', element);
 
     addEventListener('click', beginToChangeXPath, updateButton);
   }
 
   function evaluate() {
-    field.value = parseField(field)
+    value = parseField(field)
   }
 
   function beginToChangeXPath() {

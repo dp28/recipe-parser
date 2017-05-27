@@ -13,16 +13,16 @@ import {
 export function TextField(field, onUpdate) {
   const element = document.createElement('div');
   element.classList.add('field');
+  let value;
 
   function render({ editing } = { editing: false }) {
-    element.innerHTML = template({ field, editing });
+    element.innerHTML = template({ field, editing, value });
     const updateButton = dom.find('.updateButton', element);
     addEventListener('click', beginToChangeXPath, updateButton);
   }
 
   function evaluate() {
-    console.log(field, parseField(field))
-    field.value = parseField(field);
+    value = parseField(field);
   }
 
   function beginToChangeXPath() {

@@ -3,14 +3,17 @@ import { TextField } from './components/text-field/text-field';
 import { registerFunctions, connect } from './messaging/rpc';
 
 const Connection = connect();
-const Host = location.host;
+const URL = {
+  host: location.host,
+  path: location.pathname,
+};
 
 call('fetchRecipeParser')
-  .then(recipe => recipe || buildEmptyRecipeParser())
+  .then(parser => parser || buildEmptyRecipeParser())
   .then(loadPopup);
 
-function loadPopup(recipe) {
-  const popup = RecipeForm(recipe, updateRecipe);
+function loadPopup(parser) {
+  const popup = buildPopup(parser)
   document.body.appendChild(popup);
 
   togglePopup();
@@ -26,16 +29,21 @@ function loadPopup(recipe) {
 
 function buildEmptyRecipeParser() {
   return {
-    title: { name: 'title', type: 'text' },
-    ingredients: { name: 'ingredients', type: 'list' },
-    method: { name: 'method', type: 'list' },
-  };
+    url: URL,
+    fields: {
+      title: { name: 'title', type: 'text' },
+      ingredients: { name: 'ingredients', type: 'list' },
+      method: { name: 'method', type: 'list' },
+    },
+  }
 }
 
-function updateRecipe(recipe) {
-  call('updateRecipeParser', recipe);
+function buildPopup(parser) {
+  return RecipeForm(parser.fields, (fields) => {
+    call('updateRecipeParser', { ...parser, fields });
+  });
 }
 
 function call(functionName, ...args) {
-  return Connection.call(functionName, Host, ...args);
+  return Connection.call(functionName, URL, ...args);
 }

@@ -1,6 +1,7 @@
 import { RecipeForm } from './components/recipe-form/recipe-form';
 import { TextField } from './components/text-field/text-field';
 import { registerFunctions, connect } from './messaging/rpc';
+import { findBestParser } from './parser';
 
 const Connection = connect();
 
@@ -15,11 +16,16 @@ const RecipeFields = [
   { name: 'method', type: 'list', paths: [] },
 ];
 
+const EmptyParser = {
+  url: URL,
+  fields: RecipeFields.reduce(appendFieldInOrder, {}),
+};
+
 call('fetchRecipeParser')
-  .then(parser => parser || buildEmptyRecipeParser())
+  .then(findBestParser)
   .then(loadPopup);
 
-function loadPopup(parser) {
+function loadPopup({ parser, output } = { parser: EmptyParser, output: {} }) {
   const popup = buildPopup(parser)
   document.body.appendChild(popup);
 
@@ -31,13 +37,6 @@ function loadPopup(parser) {
     const { style } = popup;
     const isHidden = style.display && style.display === 'none';
     style.display = isHidden ? 'block' : 'none';
-  }
-}
-
-function buildEmptyRecipeParser() {
-  return {
-    url: URL,
-    fields: RecipeFields.reduce(appendFieldInOrder, {}),
   }
 }
 

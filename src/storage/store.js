@@ -2,8 +2,9 @@ const Storage = chrome.storage.sync;
 
 export function get(key) {
   return new Promise((resolve) => {
-    Storage.get(key, result => {
-      resolve(result[key])});
+    Storage.get(key, (result) => {
+      resolve(result[key])
+    });
   });
 }
 

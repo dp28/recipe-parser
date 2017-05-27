@@ -9,29 +9,35 @@ chrome.browserAction.onClicked.addListener(tab => {
 
 registerFunctions(wrapAll({ fetchRecipeParser, updateRecipeParser }, logCall));
 
-function fetchRecipeParser(url) {
-  return applyWithFallback(storage.get, url);
+function fetchRecipeParser({ host, path }) {
+  return storage.get(host + path)
+    .then(result => (result ? result : storage.get(host)))
+    .then(result => result || []);
 }
 
 function updateRecipeParser({ host, path }, parser) {
   return Promise.all([
-    storage.put(host + path, parser),
-    updateIfMoreComplete(host, parser),
+    storage.put(host + path, [parser]),
+    appendParser(host, parser),
   ]);
 }
 
-function updateIfMoreComplete(storageKey, newParser) {
-  const newCompleteness = calculateCompletenessRatio(newParser);
-
-  return storage.get(storageKey).then((storedParser) => {
-    if (!storedParser || newCompleteness > calculateCompletenessRatio(storedParser)) {
-      return storage.put(storageKey, newParser);
-    }
-  });
+function appendParser(key, parser) {
+  return storage.get(key)
+    .then(savedParsers => appendIfNew(savedParsers || [], parser))
+    .then(parsers => storage.put(key, parsers));
 }
 
-function applyWithFallback(func, { host, path }) {
-  return func(host + path).then(result => result ? result : func(host));
+function appendIfNew(parsers, newParser) {
+  if (!contains(parsers, newParser)) {
+    parsers.push(newParser);
+  }
+  return parsers;
+}
+
+function contains(parsers, newParser) {
+  const stringified = JSON.stringify(newParser);
+  return parsers.some(parser => JSON.stringify(parser) === stringified);
 }
 
 function wrapAll(functionMap, wrapper) {
@@ -39,10 +45,4 @@ function wrapAll(functionMap, wrapper) {
     result[name] = wrapper(func);
     return result;
   }, {});
-}
-
-function calculateCompletenessRatio(parser) {
-  return Object
-    .values(parser.fields)
-    .reduce((sum, field) => field.value ? sum + 1 : sum, 0);
 }

@@ -10,9 +10,9 @@ const URL = {
 };
 
 const RecipeFields = [
-  { name: 'title', type: 'text' },
-  { name: 'ingredients', type: 'list' },
-  { name: 'method', type: 'list' },
+  { name: 'title', type: 'text', paths: [] },
+  { name: 'ingredients', type: 'list', paths: [] },
+  { name: 'method', type: 'list', paths: [] },
 ];
 
 call('fetchRecipeParser')

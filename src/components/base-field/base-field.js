@@ -28,22 +28,35 @@ export function BaseField({ template, requestSelection }) {
     }
 
     function updateListeners() {
-      const updateButton = find('.updateButton', element);
-      addEventListener('click', updateSelection, updateButton);
+      addClickListener('.replace', () => updateSelection(replacePath));
+      addClickListener('.add', () => updateSelection(appendPath));
     };
 
-    function updateSelection() {
+    function addClickListener(selector, listener) {
+      const toClick = find(selector, element);
+      if (toClick) {
+        addEventListener('click', listener, toClick);
+      }
+    };
+
+    function updateSelection(updatePath) {
       render({ editing: true });
       setTimeout(() => {
-        requestSelection().then(updatePath);
+        requestSelection().then(path => {
+          updatePath(path);
+          evaluate();
+          onUpdate(field);
+          render();
+        });
       });
     };
 
-    function updatePath(path) {
-      field.path = path;
-      evaluate();
-      onUpdate(field);
-      render();
+    function replacePath(path) {
+      field.paths = [path];
+    };
+
+    function appendPath(path) {
+      field.paths.push(path);
     };
 
     function evaluate() {

@@ -1,7 +1,8 @@
-label
-  | #{field.name}
-  button.updateButton edit
-
-input.xpath(type='hidden' value='#{field.path}')
+.name #{field.name}
+  if field.paths.length === 0
+    button.replace set
+  else
+    button.replace replace
+    button.add add more
 
 != subTemplate
